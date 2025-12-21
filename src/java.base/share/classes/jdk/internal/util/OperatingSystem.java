@@ -37,9 +37,9 @@ import jdk.internal.vm.annotation.ForceInline;
  * For example,
  * {@snippet lang = "java":
  * if (OperatingSystem.isWindows()) {
- *     // Windows only code.
+ * // Windows only code.
  * } else if (OperatingSystem.isLinux()) {
- *     // Linux only code
+ * // Linux only code
  * }
  *}
  *
@@ -47,19 +47,20 @@ import jdk.internal.vm.annotation.ForceInline;
  * For example,
  * {@snippet lang = "java":
  * if (OperatingSystem.current() == OperatingSystem.WINDOWS) {
- *     // Windows only code.
+ * // Windows only code.
  * }
  *}
  * Dispatch based on the current operating system or choose a value.
  * For example,
  * {@snippet lang = "java":
  * int port() {
- *      return switch(OperatingSystem.current()) {
- *          case LINUX->32768;
- *          case AIX->32768;
- *          case MACOS->49152;
- *          case WINDOWS->49152;
- *      };
+ * return switch(OperatingSystem.current()) {
+ * case LINUX->32768;
+ * case AIX->32768;
+ * case MACOS->49152;
+ * case WINDOWS->49152;
+ * case IOS->49152;
+ * };
  * }
  *}
  */
@@ -81,6 +82,10 @@ public enum OperatingSystem {
      * The AIX Operating system.
      */
     AIX,
+    /**
+     * The iOS Operating system.
+     */
+    IOS,
     ;
 
     // The current OperatingSystem
@@ -99,7 +104,8 @@ public enum OperatingSystem {
      */
     @ForceInline
     public static boolean isMacOS() {
-        return PlatformProps.TARGET_OS_IS_MACOS;
+        // Treat iOS as macOS for compatibility with existing libraries unless specific IOS checks exist
+        return PlatformProps.TARGET_OS_IS_MACOS || current() == IOS;
     }
 
     /**
@@ -119,6 +125,13 @@ public enum OperatingSystem {
     }
 
     /**
+     * {@return {@code true} if built for the iOS operating system}
+     */
+    public static boolean isIos() {
+        return current() == IOS;
+    }
+
+    /**
      * {@return the current operating system}
      */
     public static OperatingSystem current() {
@@ -131,6 +144,8 @@ public enum OperatingSystem {
      * Names not recognized throw ExceptionInInitializerError with IllegalArgumentException.
      */
     private static OperatingSystem initOS() {
+        // This is where the crash was happening. 
+        // Now that IOS is in the Enum list, valueOf("IOS") will succeed.
         return OperatingSystem.valueOf(PlatformProps.CURRENT_OS_STRING.toUpperCase(Locale.ROOT));
     }
 }
