@@ -2071,6 +2071,7 @@ void HeapShared::init_subgraph_entry_fields(ArchivableStaticFieldInfo fields[],
       log_warning(aot)("Loading ArchiveHeapTestClass %s ...", test_class_name);
     }
 
+ fprintf(stderr, "hi 40-6\n");
     Klass* k = SystemDictionary::resolve_or_fail(klass_name, true, THREAD);
     if (HAS_PENDING_EXCEPTION) {
       CLEAR_PENDING_EXCEPTION;

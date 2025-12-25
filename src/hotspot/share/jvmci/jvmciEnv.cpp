@@ -499,6 +499,7 @@ class HotSpotToSharedLibraryExceptionTranslation : public ExceptionTranslation {
       decode(THREAD, _encode_fail, buffer);
       return 0;
     }
+    fprintf(stderr, "hi 40-39\n");
     Klass* vmSupport = SystemDictionary::resolve_or_fail(vmSymbols::jdk_internal_vm_VMSupport(), true, THREAD);
     if (handle_pending_exception(THREAD, buffer, buffer_size)) {
       return 0;
@@ -552,6 +553,7 @@ class SharedLibraryToHotSpotExceptionTranslation : public ExceptionTranslation {
 
   void decode(JavaThread* THREAD, DecodeFormat format, jlong buffer) {
     JVMCI_event_1("decoding exception to JVM heap (format: %d, buffer[%d]) ", format, buffer == 0L ? -1 : *((u4*) buffer));
+    fprintf(stderr, "hi 40-40\n");
     Klass* vmSupport = SystemDictionary::resolve_or_fail(vmSymbols::jdk_internal_vm_VMSupport(), true, CHECK);
     JavaCallArguments jargs;
     jargs.push_int(format);

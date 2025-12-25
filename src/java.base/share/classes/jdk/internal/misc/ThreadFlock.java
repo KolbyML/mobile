@@ -117,6 +117,7 @@ public class ThreadFlock implements AutoCloseable {
     }
 
     private ScopedValueContainer.BindingsSnapshot scopedValueBindings() {
+         System.err.println( "hi 50-7\n");
         return scopedValueBindings;
     }
 
@@ -571,6 +572,7 @@ public class ThreadFlock implements AutoCloseable {
         }
         @Override
         public ScopedValueContainer.BindingsSnapshot scopedValueBindings() {
+             System.err.println( "hi 50-6\n");
             return flock.scopedValueBindings();
         }
     }

@@ -350,10 +350,12 @@ public class Thread implements Runnable {
     private static final Object NEW_THREAD_BINDINGS = Thread.class;
 
     static Object scopedValueBindings() {
+         System.err.println( "hi 50-16\n");
         return currentThread().scopedValueBindings;
     }
 
     static void setScopedValueBindings(Object bindings) {
+          System.err.println( "hi 50-15\n");
         currentThread().scopedValueBindings = bindings;
     }
 
@@ -369,10 +371,12 @@ public class Thread implements Runnable {
      */
     void inheritScopedValueBindings(ThreadContainer container) {
         ScopedValueContainer.BindingsSnapshot snapshot;
+        System.err.println("hi 50-14\n");
         if (container.owner() != null
                 && (snapshot = container.scopedValueBindings()) != null) {
 
             // bindings established for running/calling an operation
+             System.err.println( "hi 50-12\n");
             Object bindings = snapshot.scopedValueBindings();
             if (currentThread().scopedValueBindings != bindings) {
                 throw new StructureViolationException("Scoped value bindings have changed");
@@ -1512,6 +1516,7 @@ public class Thread implements Runnable {
     public void run() {
         Runnable task = holder.task;
         if (task != null) {
+             System.err.println( "hi 50-11\n");
             Object bindings = scopedValueBindings();
             runWith(bindings, task);
         }

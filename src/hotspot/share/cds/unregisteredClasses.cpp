@@ -49,10 +49,12 @@ void UnregisteredClasses::initialize(TRAPS) {
 
   // no need for synchronization as this function is called single-threaded.
   klass_name = SymbolTable::new_symbol("jdk/internal/misc/CDS$UnregisteredClassLoader");
+   fprintf(stderr, "hi 40-8\n");
   k = SystemDictionary::resolve_or_fail(klass_name, true, CHECK);
   _UnregisteredClassLoader_klass = InstanceKlass::cast(k);
 
   klass_name = SymbolTable::new_symbol("jdk/internal/misc/CDS$UnregisteredClassLoader$Source");
+   fprintf(stderr, "hi 40-9\n");
   k = SystemDictionary::resolve_or_fail(klass_name, true, CHECK);
   _UnregisteredClassLoader_Source_klass = InstanceKlass::cast(k);
 

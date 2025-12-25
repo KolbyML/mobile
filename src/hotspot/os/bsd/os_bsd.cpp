@@ -359,8 +359,10 @@ void os::init_system_properties_values() {
 #define SYS_EXT_DIR     "/usr/java/packages"
 #define EXTENSIONS_DIR  "/lib/ext"
 
-#ifndef __APPLE__
+    fprintf(stderr,"hi 1-1\n");
 
+#ifndef __APPLE__
+fprintf(stderr,"hi 1-2");
   // Buffer that fits several snprintfs.
   // Note that the space for the colon and the trailing null are provided
   // by the nulls included by the sizeof operator.
@@ -395,7 +397,7 @@ void os::init_system_properties_values() {
     }
     Arguments::set_java_home(buf);
     if (!set_boot_path('/', ':')) {
-      vm_exit_during_initialization("Failed setting boot class path.", nullptr);
+      vm_exit_during_initialization("Failed setting boot class path. 2", nullptr);
     }
   }
 
@@ -436,10 +438,13 @@ void os::init_system_properties_values() {
   #define SYS_EXTENSIONS_DIR   "/Library/Java/Extensions"
   #define SYS_EXTENSIONS_DIRS  SYS_EXTENSIONS_DIR ":/Network" SYS_EXTENSIONS_DIR ":/System" SYS_EXTENSIONS_DIR ":/usr/lib/java"
 
+fprintf(stderr,"hi 1-3");
   const char *user_home_dir = get_home();
+  fprintf(stderr,"hi 1-4");
   // The null in SYS_EXTENSIONS_DIRS counts for the size of the colon after user_home_dir.
   size_t system_ext_size = strlen(user_home_dir) + sizeof(SYS_EXTENSIONS_DIR) +
     sizeof(SYS_EXTENSIONS_DIRS);
+    fprintf(stderr,"hi 1-5");
 
   // Buffer that fits several snprintfs.
   // Note that the space for the colon and the trailing null are provided
@@ -448,7 +453,7 @@ void os::init_system_properties_values() {
     MAX2((size_t)MAXPATHLEN,  // for dll_dir & friends.
          (size_t)MAXPATHLEN + sizeof(EXTENSIONS_DIR) + system_ext_size); // extensions dir
   char *buf = NEW_C_HEAP_ARRAY(char, bufsize, mtInternal);
-
+fprintf(stderr,"hi 1-6");
   // sysclasspath, java_home, dll_dir
   {
     char *pslash;
@@ -477,11 +482,15 @@ void os::init_system_properties_values() {
       }
     }
 #endif
+    fprintf(stderr,"hi 1-7");
     Arguments::set_java_home(buf);
+    fprintf(stderr,"hi 1-8");
     if (!set_boot_path('/', ':')) {
-        vm_exit_during_initialization("Failed setting boot class path.", nullptr);
+        fprintf(stderr,"hi 1-9");
+        vm_exit_during_initialization("Failed setting boot class path. 3", nullptr);
     }
   }
+  fprintf(stderr,"hi 1-11");
 
   // Where to look for native libraries.
   //
@@ -523,6 +532,7 @@ void os::init_system_properties_values() {
     FREE_C_HEAP_ARRAY(char, ld_library_path);
   }
 
+    fprintf(stderr,"hi 1-20");
   // Extensions directories.
   //
   // Note that the space for the colon and the trailing null are provided
@@ -532,6 +542,7 @@ void os::init_system_properties_values() {
                        user_home_dir, Arguments::get_java_home());
   Arguments::set_ext_dirs(buf);
 
+    fprintf(stderr,"hi 1-25");
   FREE_C_HEAP_ARRAY(char, buf);
 
 #undef SYS_EXTENSIONS_DIR

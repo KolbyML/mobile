@@ -225,6 +225,7 @@ static bool register_static_type(JfrTypeId id, bool permit_cache, JfrSerializer*
 static bool load_thread_constants(TRAPS) {
   Symbol* const thread_constants_sym = vmSymbols::java_lang_Thread_Constants();
   assert(thread_constants_sym != nullptr, "invariant");
+  fprintf(stderr, "hi 40-33\n");
   Klass* const k_thread_constants = SystemDictionary::resolve_or_fail(thread_constants_sym, false, CHECK_false);
   assert(k_thread_constants != nullptr, "invariant");
   k_thread_constants->initialize(THREAD);

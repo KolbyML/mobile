@@ -553,6 +553,7 @@ class CompileReplay : public StackObj {
       if (_iklass != nullptr) {
         k = (Klass*)_iklass->find_klass(ciSymbol::make(klass_name->as_C_string()))->constant_encoding();
       } else {
+         fprintf(stderr, "hi 40-10\n");
         k = SystemDictionary::resolve_or_fail(klass_name, _loader, true, THREAD);
       }
       if (HAS_PENDING_EXCEPTION) {
@@ -574,6 +575,7 @@ class CompileReplay : public StackObj {
   // Lookup a klass
   Klass* resolve_klass(const char* klass, TRAPS) {
     Symbol* klass_name = SymbolTable::new_symbol(klass);
+     fprintf(stderr, "hi 40-11\n");
     return SystemDictionary::resolve_or_fail(klass_name, _loader, true, THREAD);
   }
 

@@ -497,6 +497,7 @@ Method* LinkResolver::lookup_polymorphic_method(const LinkInfo& link_info,
         // Make sure the Java part of the runtime has been booted up.
         Klass* natives = vmClasses::MethodHandleNatives_klass();
         if (natives == nullptr || InstanceKlass::cast(natives)->is_not_initialized()) {
+             fprintf(stderr, "hi 40-27\n");
           SystemDictionary::resolve_or_fail(vmSymbols::java_lang_invoke_MethodHandleNatives(),
                                             Handle(),
                                             true,

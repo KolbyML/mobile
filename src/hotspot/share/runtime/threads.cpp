@@ -123,6 +123,7 @@ void universe_post_module_init();  // must happen after call_initPhase2
 
 
 static void initialize_class(Symbol* class_name, TRAPS) {
+    fprintf(stderr, "hi 40-49\n");
   Klass* klass = SystemDictionary::resolve_or_fail(class_name, true, CHECK);
   InstanceKlass::cast(klass)->initialize(CHECK);
 }
@@ -448,6 +449,7 @@ class ReadReleaseFileTask : public PeriodicTask {
 };
 
 jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
+    fprintf(stderr, "hi 60-13\n");
   extern void JDK_Version_init();
 
   // Preinitialize version info.
@@ -619,8 +621,11 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
   // of hangs during error reporting.
   WatcherThread::start();
 
+  fprintf(stderr, "hi 60-12\n");
   status = init_globals2();
+  fprintf(stderr, "hi 60-13 %s\n", status);
   if (status != JNI_OK) {
+    fprintf(stderr, "hi 60-16\n");
     Threads::remove(main_thread, false);
     // It is possible that we managed to fully initialize Universe but have then
     // failed by throwing an exception. In that case our caller JNI_CreateJavaVM
@@ -629,8 +634,10 @@ jint Threads::create_vm(JavaVMInitArgs* args, bool* canTryAgain) {
       main_thread->smr_delete();
     }
     *canTryAgain = false; // don't let caller call JNI_CreateJavaVM again
+    fprintf(stderr, "hi 60-17\n");
     return status;
   }
+  fprintf(stderr, "hi 60-18\n");
 
   ObjectMonitor::Initialize2();
 

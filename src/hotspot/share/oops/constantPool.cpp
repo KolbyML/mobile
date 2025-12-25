@@ -665,6 +665,7 @@ Klass* ConstantPool::klass_at_impl(const constantPoolHandle& this_cp, int cp_ind
   {
     // Turn off the single stepping while doing class resolution
     JvmtiHideSingleStepping jhss(javaThread);
+    fprintf(stderr, "hi 40-45\n");
     k = SystemDictionary::resolve_or_fail(name, loader, true, THREAD);
   } //  JvmtiHideSingleStepping jhss(javaThread);
 

@@ -957,6 +957,7 @@ bool InstanceKlass::link_class_impl(TRAPS) {
     // it doesn't execute any Java code.
     ResourceMark rm(THREAD);
     // Names are all known to be < 64k so we know this formatted message is not excessively large.
+    fprintf(stderr, "hi 11-1\n");
     Exceptions::fthrow(THREAD_AND_LOCATION,
                        vmSymbols::java_lang_NoClassDefFoundError(),
                        "Class %s, or one of its supertypes, failed class initialization",
@@ -1300,8 +1301,10 @@ void InstanceKlass::initialize_impl(TRAPS) {
       stringStream ss;
       ss.print("Could not initialize class %s", external_name());
       if (cause.is_null()) {
+        fprintf(stderr, "hi 12-1\n");
         THROW_MSG(vmSymbols::java_lang_NoClassDefFoundError(), ss.as_string());
       } else {
+        fprintf(stderr, "hi 13-1\n");
         THROW_MSG_CAUSE(vmSymbols::java_lang_NoClassDefFoundError(),
                         ss.as_string(), cause);
       }

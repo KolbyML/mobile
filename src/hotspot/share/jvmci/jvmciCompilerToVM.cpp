@@ -632,6 +632,7 @@ C2V_VMENTRY_NULL(jobject, lookupType, (JNIEnv* env, jobject, jstring jname, ARGU
   }
 
   if (resolve) {
+    fprintf(stderr, "hi 40-37\n");
     resolved_klass = SystemDictionary::resolve_or_fail(class_name, class_loader, true, CHECK_NULL);
   } else {
     if (Signature::has_envelope(class_name)) {
@@ -3023,6 +3024,7 @@ static jbyteArray get_encoded_annotation_data(InstanceKlass* holder, AnnotationA
 
   // load VMSupport
   Symbol* klass = vmSymbols::jdk_internal_vm_VMSupport();
+  fprintf(stderr, "hi 40-38\n");
   Klass* k = SystemDictionary::resolve_or_fail(klass, true, CHECK_NULL);
 
   InstanceKlass* vm_support = InstanceKlass::cast(k);

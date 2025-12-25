@@ -651,7 +651,7 @@ void vm_exit_during_cds_dumping(const char* error, const char* message) {
 
 static void vm_notify_during_shutdown(const char* error, const char* message) {
   if (error != nullptr) {
-    tty->print_cr("Error occurred during initialization of VM");
+    tty->print_cr("Error occurred during initialization of VM 1");
     tty->print("%s", error);
     if (message != nullptr) {
       tty->print_cr(": %s", message);
@@ -661,7 +661,7 @@ static void vm_notify_during_shutdown(const char* error, const char* message) {
     }
   }
   if (ShowMessageBoxOnError && WizardMode) {
-    fatal("Error occurred during initialization of VM");
+    fatal("Error occurred during initialization of VM 2");
   }
 }
 
@@ -673,7 +673,7 @@ void vm_exit_during_initialization() {
 }
 
 void vm_exit_during_initialization(Handle exception) {
-  tty->print_cr("Error occurred during initialization of VM");
+  tty->print_cr("Error occurred during initialization of VM 3");
   // If there are exceptions on this thread it must be cleared
   // first and here. Any future calls to EXCEPTION_MARK requires
   // that no pending exceptions exist.

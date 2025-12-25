@@ -89,6 +89,7 @@ static typeArrayOop invoke(jlong trace_id,
                            jint& new_bytes_length,
                            TRAPS) {
   DEBUG_ONLY(JfrJavaSupport::check_java_thread_in_vm(THREAD));
+   fprintf(stderr, "hi 40-29\n");
   const Klass* klass = SystemDictionary::resolve_or_fail(jvm_upcalls_class_sym, true, CHECK_NULL);
   assert(klass != nullptr, "invariant");
   typeArrayOop old_byte_array = oopFactory::new_byteArray(class_data_len, CHECK_NULL);
@@ -209,6 +210,7 @@ bool JfrUpcalls::unhide_internal_types(TRAPS) {
     return false;
   }
   JavaValue result(T_VOID);
+   fprintf(stderr, "hi 40-30\n");
   const Klass* klass = SystemDictionary::resolve_or_fail(jvm_upcalls_class_sym, true, CHECK_false);
   assert(klass != nullptr, "invariant");
   JfrJavaArguments args(&result, klass, unhide_internal_types_sym, unhide_internal_types_sig_sym);
@@ -229,6 +231,7 @@ ClassFileStream* JfrUpcalls::on_method_trace(InstanceKlass* ik, const ClassFileS
   assert(methods != nullptr, "invariant");
   assert(methods->is_nonempty(), "invariant");
   initialize(THREAD);
+  fprintf(stderr, "hi 40-31\n");
   Klass* klass = SystemDictionary::resolve_or_fail(jvm_upcalls_class_sym, true, CHECK_NULL);
   assert(klass != nullptr, "invariant");
 
@@ -314,6 +317,7 @@ ClassFileStream* JfrUpcalls::on_method_trace(InstanceKlass* ik, const ClassFileS
 
 void JfrUpcalls::publish_method_timers_for_klass(traceid klass_id, TRAPS) {
   DEBUG_ONLY(JfrJavaSupport::check_java_thread_in_vm(THREAD));
+  fprintf(stderr, "hi 40-32\n");
   Klass* const klass = SystemDictionary::resolve_or_fail(jvm_upcalls_class_sym, true, CHECK);
   assert(klass != nullptr, "invariant");
   JavaCallArguments args;

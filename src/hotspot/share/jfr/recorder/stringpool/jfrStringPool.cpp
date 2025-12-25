@@ -48,6 +48,7 @@ static bool setup_string_pool_offsets(TRAPS) {
   const char class_name[] = "jdk/jfr/internal/StringPool";
   Symbol* const k_sym = SymbolTable::new_symbol(class_name);
   assert(k_sym != nullptr, "invariant");
+  fprintf(stderr, "hi 40-34\n");
   Klass* klass = SystemDictionary::resolve_or_fail(k_sym, true, CHECK_false);
   assert(klass != nullptr, "invariant");
   klass->initialize(CHECK_false);

@@ -272,6 +272,7 @@ bool Verifier::verify(InstanceKlass* klass, bool should_verify_class, TRAPS) {
   } else if (exception_name == nullptr) {
     return true; // verification succeeded
   } else { // VerifyError or ClassFormatError to be created and thrown
+   fprintf(stderr, "hi 40-24\n");
     Klass* kls =
       SystemDictionary::resolve_or_fail(exception_name, true, CHECK_false);
     if (log_is_enabled(Debug, class, resolve)) {
@@ -2094,6 +2095,7 @@ Klass* ClassVerifier::load_class(Symbol* name, TRAPS) {
 
   assert(name_in_supers(name, current_class()), "name should be a super class");
 
+ fprintf(stderr, "hi 40-25\n");
   Klass* kls = SystemDictionary::resolve_or_fail(
     name, Handle(THREAD, loader), true, THREAD);
 

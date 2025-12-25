@@ -114,6 +114,7 @@ void AOTReferenceObjSupport::initialize(TRAPS) {
   }
 
   TempNewSymbol class_name = SymbolTable::new_symbol("java/lang/ref/ReferenceQueue");
+   fprintf(stderr, "hi 40-2\n");
   Klass* k = SystemDictionary::resolve_or_fail(class_name, true, CHECK);
   InstanceKlass* ik = InstanceKlass::cast(k);
   ik->initialize(CHECK);
@@ -145,6 +146,7 @@ void AOTReferenceObjSupport::stabilize_cached_reference_objects(TRAPS) {
 
     {
       Symbol* cds_name  = vmSymbols::jdk_internal_misc_CDS();
+       fprintf(stderr, "hi 40-3\n");
       Klass* cds_klass = SystemDictionary::resolve_or_fail(cds_name, true /*throw error*/,  CHECK);
       TempNewSymbol method_name = SymbolTable::new_symbol("getKeepAliveObjects");
       TempNewSymbol method_sig = SymbolTable::new_symbol("()[Ljava/lang/Object;");

@@ -59,6 +59,7 @@ bool VerificationType::resolve_and_check_assignability(InstanceKlass* current_kl
   if (current_klass->is_hidden() && current_klass->name() == target_name) {
     target_klass = current_klass;
   } else {
+     fprintf(stderr, "hi 40-22\n");
     target_klass = SystemDictionary::resolve_or_fail(
       target_name, Handle(THREAD, current_klass->class_loader()), true, CHECK_false);
     if (log_is_enabled(Debug, class, resolve)) {
@@ -85,6 +86,7 @@ bool VerificationType::resolve_and_check_assignability(InstanceKlass* current_kl
     if (current_klass->is_hidden() && current_klass->name() == from_name) {
       from_klass = current_klass;
     } else {
+         fprintf(stderr, "hi 40-23\n");
       from_klass = SystemDictionary::resolve_or_fail(
         from_name, Handle(THREAD, current_klass->class_loader()), true, CHECK_false);
       if (log_is_enabled(Debug, class, resolve)) {

@@ -254,6 +254,7 @@ ClassPathDirEntry::~ClassPathDirEntry() {
 }
 
 ClassFileStream* ClassPathDirEntry::open_stream(JavaThread* current, const char* name) {
+    fprintf(stderr, "hi 190-1\n");
   // construct full path name
   assert((_dir != nullptr) && (name != nullptr), "sanity");
   size_t path_len = strlen(_dir) + strlen(name) + strlen(os::file_separator()) + 1;
@@ -355,6 +356,8 @@ u1* ClassPathZipEntry::open_entry(JavaThread* current, const char* name, jint* f
 }
 
 ClassFileStream* ClassPathZipEntry::open_stream(JavaThread* current, const char* name) {
+            fprintf(stderr, "hi 180-1\n");
+
   jint filesize;
   u1* buffer = open_entry(current, name, &filesize, false);
   if (buffer == nullptr) {
@@ -400,6 +403,7 @@ ClassPathImageEntry::ClassPathImageEntry(JImageFile* jimage, const char* name) :
 }
 
 ClassFileStream* ClassPathImageEntry::open_stream(JavaThread* current, const char* name) {
+    fprintf(stderr, "hi 200-1\n");
   return open_stream_for_loader(current, name, ClassLoaderData::the_null_class_loader_data());
 }
 
@@ -517,6 +521,7 @@ void ClassLoader::trace_class_path(const char* msg, const char* name) {
 }
 
 void ClassLoader::setup_bootstrap_search_path(JavaThread* current) {
+    fprintf(stderr,"hi 4-1\n");
   const char* bootcp = Arguments::get_boot_class_path();
   assert(bootcp != nullptr, "Boot class path must not be nullptr");
   if (PrintSharedArchiveAndExit) {
@@ -593,22 +598,28 @@ bool ClassLoader::is_in_patch_mod_entries(Symbol* module_name) {
 
 // Set up the _jrt_entry if present and boot append path
 void ClassLoader::setup_bootstrap_search_path_impl(JavaThread* current, const char *class_path) {
+    fprintf(stderr,"hi 5-1\n");
   ResourceMark rm(current);
   ClasspathStream cp_stream(class_path);
   bool set_base_piece = true;
 
 #if INCLUDE_CDS
+    fprintf(stderr, "hi 5-1.1\n");
   if (CDSConfig::is_dumping_archive()) {
+    fprintf(stderr, "hi 5-1.2\n");
     if (!Arguments::has_jimage()) {
       vm_exit_during_initialization("CDS is not supported in exploded JDK build", nullptr);
     }
   }
 #endif
 
+fprintf(stderr, "hi 5-1.3\n");
   while (cp_stream.has_next()) {
     const char* path = cp_stream.get_next();
 
+fprintf(stderr, "hi 5-1.4\n");
     if (set_base_piece) {
+        fprintf(stderr, "hi 5-1.5\n");
       // The first time through the bootstrap_search setup, it must be determined
       // what the base or core piece of the boot loader search is.  Either a java runtime
       // image is present or this is an exploded module build situation.
@@ -616,13 +627,17 @@ void ClassLoader::setup_bootstrap_search_path_impl(JavaThread* current, const ch
              "Incorrect boot loader search path, no java runtime image or " JAVA_BASE_NAME " exploded build");
       struct stat st;
       if (os::stat(path, &st) == 0) {
+        fprintf(stderr, "hi 5-1.6\n");
         // Directory found
         if (JImage_file != nullptr) {
+            fprintf(stderr, "hi 5-1.7\n");
           assert(Arguments::has_jimage(), "sanity check");
           const char* canonical_path = get_canonical_path(path, current);
           assert(canonical_path != nullptr, "canonical_path issue");
 
           _jrt_entry = new ClassPathImageEntry(JImage_file, canonical_path);
+          fprintf(stderr, "hi 5-1.8 %s || %s\n", _jrt_entry != nullptr ? "true" : "false",
+                _jrt_entry->jimage());
           assert(_jrt_entry != nullptr && _jrt_entry->is_modules_image(), "No java runtime image present");
           assert(_jrt_entry->jimage() != nullptr, "No java runtime image");
         } // else it's an exploded build.
@@ -632,6 +647,8 @@ void ClassLoader::setup_bootstrap_search_path_impl(JavaThread* current, const ch
       }
       set_base_piece = false;
     } else {
+                    fprintf(stderr, "hi 5-1.9\n");
+
       // Every entry on the boot class path after the initial base piece,
       // which is set by os::set_boot_path(), is considered an appended entry.
       update_class_path_entry_list(current, path);
@@ -764,15 +781,20 @@ bool ClassLoader::update_class_path_entry_list(JavaThread* current, const char *
     // File or directory found
     ClassPathEntry* new_entry = nullptr;
     new_entry = create_class_path_entry(current, path, &st);
+                fprintf(stderr, "hi 110-1.1\n");
+
     if (new_entry == nullptr) {
+        fprintf(stderr, "hi 110-1.2\n");
       return false;
     }
-
+fprintf(stderr, "hi 110-1.3\n");
     // Do not reorder the bootclasspath which would break get_system_package().
     // Add new entry to linked list
     add_to_boot_append_entries(new_entry);
+    fprintf(stderr, "hi 110-1.4\n");
     return true;
   } else {
+    fprintf(stderr, "hi 110-1.5\n");
     return false;
   }
 }
@@ -978,6 +1000,7 @@ ClassFileStream* ClassLoader::search_module_entries(JavaThread* current,
                                                     const GrowableArray<ModuleClassPathList*>* const module_list,
                                                     PackageEntry* pkg_entry, // Java package entry derived from the class name
                                                     const char* const file_name) {
+  fprintf(stderr, "hi 220-1\n");
   ClassFileStream* stream = nullptr;
 
   // Find the defining module in the boot loader's module entry table
@@ -993,31 +1016,38 @@ ClassFileStream* ClassLoader::search_module_entries(JavaThread* current,
       mod_entry == nullptr) {
     mod_entry = ModuleEntryTable::javabase_moduleEntry();
   }
+  fprintf(stderr, "hi 220-2\n");
 
   // The module must be a named module
   ClassPathEntry* e = nullptr;
   if (mod_entry != nullptr && mod_entry->is_named()) {
+    fprintf(stderr, "hi 220-3\n");
     if (module_list == _exploded_entries) {
+        fprintf(stderr, "hi 220-4\n");
       // The exploded build entries can be added to at any time so a lock is
       // needed when searching them.
       assert(!ClassLoader::has_jrt_entry(), "Must be exploded build");
       MutexLocker ml(current, Module_lock);
       e = find_first_module_cpe(mod_entry, module_list);
     } else {
+        fprintf(stderr, "hi 220-5\n");
       e = find_first_module_cpe(mod_entry, module_list);
     }
   }
 
   // Try to load the class from the module's ClassPathEntry list.
   while (e != nullptr) {
+    fprintf(stderr, "hi 220-6\n");
     stream = e->open_stream(current, file_name);
     // No context.check is required since CDS is not supported
     // for an exploded modules build or if --patch-module is specified.
     if (nullptr != stream) {
+        fprintf(stderr, "hi 220-7\n");
       return stream;
     }
     e = e->next();
   }
+  fprintf(stderr, "hi 220-8\n");
   // If the module was located, break out even if the class was not
   // located successfully from that module's ClassPathEntry list.
   // There will not be another valid entry for that module.
@@ -1026,6 +1056,7 @@ ClassFileStream* ClassLoader::search_module_entries(JavaThread* current,
 
 // Called by the boot classloader to load classes
 InstanceKlass* ClassLoader::load_class(Symbol* name, PackageEntry* pkg_entry, bool search_append_only, TRAPS) {
+     fprintf(stderr, "hi 170-1\n");
   assert(name != nullptr, "invariant");
 
   ResourceMark rm(THREAD);
@@ -1061,26 +1092,34 @@ InstanceKlass* ClassLoader::load_class(Symbol* name, PackageEntry* pkg_entry, bo
   // found within its module specification, the search should continue to Load Attempt #2.
   // Note: The --patch-module entries are never searched if the boot loader's
   //       visibility boundary is limited to only searching the append entries.
+  fprintf(stderr, "hi 170-2\n");
   if (_patch_mod_entries != nullptr && !search_append_only) {
+    fprintf(stderr, "hi 170-3\n");
     assert(!CDSConfig::is_dumping_archive(), "CDS doesn't support --patch-module during dumping");
     stream = search_module_entries(THREAD, _patch_mod_entries, pkg_entry, file_name);
   }
 
   // Load Attempt #2: [jimage | exploded build]
+    fprintf(stderr, "hi 170-4\n");
   if (!search_append_only && (nullptr == stream)) {
+    fprintf(stderr, "hi 170-5\n");
     if (has_jrt_entry()) {
+        fprintf(stderr, "hi 170-6\n");
       e = _jrt_entry;
       stream = _jrt_entry->open_stream(THREAD, file_name);
     } else {
+        fprintf(stderr, "hi 170-7\n");
       // Exploded build - attempt to locate class in its defining module's location.
       assert(_exploded_entries != nullptr, "No exploded build entries present");
       assert(!CDSConfig::is_dumping_archive(), "CDS dumping doesn't support exploded build");
       stream = search_module_entries(THREAD, _exploded_entries, pkg_entry, file_name);
     }
   }
+  fprintf(stderr, "hi 170-8\n");
 
   // Load Attempt #3: [-Xbootclasspath/a]; [jvmti appended entries]
   if (search_append_only && (nullptr == stream)) {
+    fprintf(stderr, "hi 170-9\n");
     // For the boot loader append path search, the starting classpath_index
     // for the appended piece is always 1 to account for either the
     // _jrt_entry or the _exploded_entries.
@@ -1089,6 +1128,7 @@ InstanceKlass* ClassLoader::load_class(Symbol* name, PackageEntry* pkg_entry, bo
 
     e = first_append_entry();
     while (e != nullptr) {
+        fprintf(stderr, "hi 170-9.1\n");
       stream = e->open_stream(THREAD, file_name);
       if (nullptr != stream) {
         break;
@@ -1099,6 +1139,7 @@ InstanceKlass* ClassLoader::load_class(Symbol* name, PackageEntry* pkg_entry, bo
   }
 
   if (nullptr == stream) {
+    fprintf(stderr, "hi 170-10\n");
     return nullptr;
   }
 
@@ -1112,6 +1153,7 @@ InstanceKlass* ClassLoader::load_class(Symbol* name, PackageEntry* pkg_entry, bo
                                                            cl_info,
                                                            CHECK_NULL);
   result->set_classpath_index(classpath_index);
+  fprintf(stderr, "hi 170-11\n");
   return result;
 }
 
@@ -1415,7 +1457,9 @@ char* ClassLoader::lookup_vm_options() {
   // Initialize jimage library entry points
   load_jimage_library();
 
+ fprintf(stderr, "hi 260-1\n");
   jio_snprintf(modules_path, JVM_MAXPATHLEN, "%s%slib%smodules", Arguments::get_java_home(), fileSep, fileSep);
+   fprintf(stderr, "hi 260-2\n");
   JImage_file =(*JImageOpen)(modules_path, &error);
   if (JImage_file == nullptr) {
     return nullptr;

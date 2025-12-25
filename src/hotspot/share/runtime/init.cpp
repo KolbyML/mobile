@@ -170,23 +170,29 @@ jint init_globals() {
 }
 
 jint init_globals2() {
+  fprintf(stderr, "hi 60-11\n");
   universe2_init();          // dependent on codeCache_init and initial_stubs_init
+  fprintf(stderr, "hi 60-11.1\n");
   javaClasses_init();        // must happen after vtable initialization, before referenceProcessor_init
+  fprintf(stderr, "hi 60-11.2\n");
   interpreter_init_code();   // after javaClasses_init and before any method gets linked
   referenceProcessor_init();
   jni_handles_init();
+  fprintf(stderr, "hi 60-11.3\n");
 #if INCLUDE_VM_STRUCTS
   vmStructs_init();
 #endif // INCLUDE_VM_STRUCTS
 
   vtableStubs_init();
   if (!compilerOracle_init()) {
+    fprintf(stderr, "hi 60-11.4\n");
     return JNI_EINVAL;
   }
   dependencyContext_init();
   dependencies_init();
 
   if (!compileBroker_init()) {
+    fprintf(stderr, "hi 60-11.5\n");
     return JNI_EINVAL;
   }
 #if INCLUDE_JVMCI
@@ -198,6 +204,7 @@ jint init_globals2() {
   TrainingData::initialize();
 
   if (!universe_post_init()) {
+    fprintf(stderr, "hi 60-11.6\n");
     return JNI_ERR;
   }
   compiler_stubs_init(false /* in_compiler_thread */); // compiler's intrinsics stubs
@@ -209,6 +216,8 @@ jint init_globals2() {
   if (PrintFlagsFinal || PrintFlagsRanges) {
     JVMFlag::printFlags(tty, false, PrintFlagsRanges);
   }
+
+  fprintf(stderr, "hi 60-11.7\n");
 
   return JNI_OK;
 }

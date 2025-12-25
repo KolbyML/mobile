@@ -44,6 +44,7 @@ static Symbol* resolve(const char* str) {
 
 static Klass* resolve(Symbol* k_sym, TRAPS) {
   assert(k_sym != nullptr, "invariant");
+   fprintf(stderr, "hi 40-28\n");
   return SystemDictionary::resolve_or_fail(k_sym, true, THREAD);
 }
 

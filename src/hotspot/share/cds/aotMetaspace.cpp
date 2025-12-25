@@ -1289,6 +1289,7 @@ static int exec_jvm_with_java_tool_options(const char* java_launcher_path, TRAPS
   append_args(&args, "-XX:AOTMode=create", CHECK_0);
 
   Symbol* klass_name = SymbolTable::new_symbol("jdk/internal/misc/CDS$ProcessLauncher");
+  fprintf(stderr, "hi 40-1\n");
   Klass* k = SystemDictionary::resolve_or_fail(klass_name, true, CHECK_0);
   Symbol* methodName = SymbolTable::new_symbol("execWithJavaToolOptions");
   Symbol* methodSignature = SymbolTable::new_symbol("(Ljava/lang/String;[Ljava/lang/String;)I");

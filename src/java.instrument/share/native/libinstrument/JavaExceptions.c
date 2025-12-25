@@ -229,6 +229,7 @@ createThrowableFromJVMTIErrorCode(JNIEnv * jnienv, jvmtiError errorCode) {
                 break;
 
         case JVMTI_ERROR_NAMES_DONT_MATCH:
+                fprintf(stderr, "hi 6-1 JVMTI_ERROR_NAMES_DONT_MATCH encountered\n");
                 throwableClassName = "java/lang/NoClassDefFoundError";
                 message = "class names don't match";
                 break;

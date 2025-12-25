@@ -1509,36 +1509,66 @@ FILE* os::fopen(const char* path, const char* mode) {
 }
 
 bool os::set_boot_path(char fileSep, char pathSep) {
+    fprintf(stderr,"hi 2-1\n");
   const char* home = Arguments::get_java_home();
   int home_len = (int)strlen(home);
+  fprintf(stderr,"hi 2-2\n");
 
   struct stat st;
 
   // modular image if "modules" jimage exists
-#ifndef __IOS__
+// #ifndef __IOS__
+  fprintf(stderr,"hi 2-3\n");
   char* jimage = format_boot_path("%/lib/" MODULES_IMAGE_NAME, home, home_len, fileSep, pathSep);
-#else
-  char* jimage = format_boot_path("%/Documents/lib/" MODULES_IMAGE_NAME, home, home_len, fileSep, pathSep);
-#endif
+// #else
+// fprintf(stderr,"hi 2-4\n");
+//   char* jimage = format_boot_path("%/Documents/lib/" MODULES_IMAGE_NAME, home, home_len, fileSep, pathSep);
+// #endif
+fprintf(stderr, "hi 2-5: jimage path is: %s\n", jimage ? jimage : "NULL");
   if (jimage == nullptr) return false;
-  bool has_jimage = (os::stat(jimage, &st) == 0);
+  fprintf(stderr,"hi 2-6\n");
+// --- DEBUGGING START ---
+  fprintf(stderr, "DEBUG: Checking jimage path: %s\n", jimage ? jimage : "NULL");
+
+  int stat_res = os::stat(jimage, &st);
+  
+  if (stat_res != 0) {
+      // Print the error number and the human-readable error string
+      fprintf(stderr, "DEBUG: os::stat FAILED. errno=%d, message=%s\n", errno, strerror(errno));
+  } else {
+      fprintf(stderr, "DEBUG: os::stat SUCCESS. File found.\n");
+  }
+  // --- DEBUGGING END ---
+
+  bool has_jimage = (stat_res == 0);
+  fprintf(stderr,"hi 2-7\n");
   if (has_jimage) {
+
+    fprintf(stderr,"hi 2-8\n");
     Arguments::set_boot_class_path(jimage, true);
+    fprintf(stderr,"hi 2-9\n");
     FREE_C_HEAP_ARRAY(char, jimage);
+fprintf(stderr,"hi 2-10\n");
     return true;
   }
+  fprintf(stderr,"hi 2-11\n");
   FREE_C_HEAP_ARRAY(char, jimage);
 
   // check if developer build with exploded modules
   char* base_classes = format_boot_path("%/modules/" JAVA_BASE_NAME, home, home_len, fileSep, pathSep);
+  fprintf(stderr,"hi 2-12\n");
+  fprintf(stderr, "hi 2-12.1: base_classes path is: %s\n", base_classes ? base_classes : "NULL");
   if (base_classes == nullptr) return false;
+  fprintf(stderr,"hi 2-13\n");
   if (os::stat(base_classes, &st) == 0) {
+    fprintf(stderr,"hi 2-14\n");
     Arguments::set_boot_class_path(base_classes, false);
+    fprintf(stderr,"hi 2-15\n");
     FREE_C_HEAP_ARRAY(char, base_classes);
     return true;
   }
   FREE_C_HEAP_ARRAY(char, base_classes);
-
+fprintf(stderr,"hi 2-16");
   return false;
 }
 
