@@ -466,7 +466,6 @@ public final class ScopedValue<T> {
         public void run(Runnable op) {
             Objects.requireNonNull(op);
             Cache.invalidate(bitmask);
-             System.err.println("hi 50-25\n");
             var prevSnapshot = scopedValueBindings();
             var newSnapshot = new Snapshot(this, prevSnapshot);
             runWith(newSnapshot, op);
@@ -483,13 +482,11 @@ public final class ScopedValue<T> {
         @ForceInline
         private void runWith(Snapshot newSnapshot, Runnable op) {
             try {
-                 System.err.println( "hi 50-23\n");
                 Thread.setScopedValueBindings(newSnapshot);
                 Thread.ensureMaterializedForStackWalk(newSnapshot);
                 ScopedValueContainer.run(op);
             } finally {
                 Reference.reachabilityFence(newSnapshot);
-                System.err.println( "hi 50-22\n");
                 Thread.setScopedValueBindings(newSnapshot.prev);
                 Cache.invalidate(bitmask);
             }
@@ -575,7 +572,6 @@ public final class ScopedValue<T> {
 
     @SuppressWarnings("unchecked")
     private T slowGet() {
-        System.err.println( "hi 50-21\n");
         Object value = scopedValueBindings().find(this);
         if (value == Snapshot.NIL) {
             throw new NoSuchElementException("ScopedValue not bound");
@@ -602,7 +598,6 @@ public final class ScopedValue<T> {
                 return objects[n + 1];
             }
         }
-         System.err.println("hi 50-20\n");
         Object value = scopedValueBindings().find(this);
         boolean found = (value != Snapshot.NIL);
         if (found)  Cache.put(this, value);
@@ -682,7 +677,6 @@ public final class ScopedValue<T> {
         // where they are. We must invoke Thread.findScopedValueBindings() to walk
         // the stack to find them.
 
-         System.err.println( "hi 50-3\n");
         Object bindings = Thread.scopedValueBindings();
         if (bindings == NEW_THREAD_BINDINGS) {
             // This must be a new thread
@@ -690,13 +684,11 @@ public final class ScopedValue<T> {
         }
         if (bindings == null) {
             // Search the stack
-           System.err.println("hi 50-2\n");
             bindings = Thread.findScopedValueBindings();
             if (bindings == NEW_THREAD_BINDINGS || bindings == null) {
                 // We've walked the stack without finding anything.
                 bindings = Snapshot.EMPTY_SNAPSHOT;
             }
-              System.err.println( "hi 50-19\n");
             Thread.setScopedValueBindings(bindings);
         }
         assert (bindings != null);

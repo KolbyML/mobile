@@ -201,7 +201,6 @@ public:
 
   void init_if_empty(Symbol* symbol, TRAPS) {
     if (_instance.is_empty()) {
-        fprintf(stderr, "hi 40-43\n");
       Klass* k = SystemDictionary::resolve_or_fail(symbol, true, CHECK);
       oop obj = InstanceKlass::cast(k)->allocate_instance(CHECK);
       _instance = OopHandle(Universe::vm_global(), obj);
@@ -403,7 +402,6 @@ static void initialize_basic_type_klass(Klass* k, TRAPS) {
 }
 
 void Universe::genesis(TRAPS) {
-fprintf(stderr, "hi 60-6\n");
   ResourceMark rm(THREAD);
   HandleMark   hm(THREAD);
 
@@ -449,9 +447,7 @@ fprintf(stderr, "hi 60-6\n");
     // Initialize table for matching jmethodID, before SystemDictionary.
     JmethodIDTable::initialize();
 
-    fprintf(stderr, "hi 60-5\n");
     SystemDictionary::initialize(CHECK);
-    fprintf(stderr, "hi 60-5.1\n");
 
     // Create string constants
     oop s = StringTable::intern("null", CHECK);
@@ -1119,9 +1115,7 @@ void Universe::initialize_known_methods(JavaThread* current) {
 
 void universe2_init() {
   EXCEPTION_MARK;
-  fprintf(stderr, "hi 60-8\n");
   Universe::genesis(CATCH);
-  fprintf(stderr, "hi 60-8.1\n");
 }
 
 // Set after initialization of the module runtime, call_initModuleRuntime
@@ -1175,7 +1169,6 @@ bool universe_post_init() {
   java_lang_Throwable::set_message(Universe::arithmetic_exception_instance(), msg());
 
   // Setup preallocated StackOverflowError for use with class initialization failure
-  fprintf(stderr, "hi 40-44\n");
   k = SystemDictionary::resolve_or_fail(vmSymbols::java_lang_StackOverflowError(), true, CHECK_false);
   instance = InstanceKlass::cast(k)->allocate_instance(CHECK_false);
   Universe::_class_init_stack_overflow_error = OopHandle(Universe::vm_global(), instance);

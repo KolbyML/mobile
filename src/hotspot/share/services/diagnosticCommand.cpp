@@ -343,7 +343,6 @@ void JVMTIAgentLoadDCmd::execute(DCmdSource source, TRAPS) {
 void PrintSystemPropertiesDCmd::execute(DCmdSource source, TRAPS) {
   // load VMSupport
   Symbol* klass = vmSymbols::jdk_internal_vm_VMSupport();
-  fprintf(stderr, "hi 40-51\n");
   Klass* k = SystemDictionary::resolve_or_fail(klass, true, CHECK);
   InstanceKlass* ik = InstanceKlass::cast(k);
   if (ik->should_be_initialized()) {
@@ -429,7 +428,6 @@ void FinalizerInfoDCmd::execute(DCmdSource source, TRAPS) {
     return;
   }
 
-fprintf(stderr, "hi 40-52\n");
   Klass* k = SystemDictionary::resolve_or_fail(
     vmSymbols::finalizer_histogram_klass(), true, CHECK);
 
@@ -703,7 +701,6 @@ void JMXStartRemoteDCmd::execute(DCmdSource source, TRAPS) {
 
     loadAgentModule(CHECK);
     Handle loader = Handle(THREAD, SystemDictionary::java_system_loader());
-    fprintf(stderr, "hi 40-53\n");
     Klass* k = SystemDictionary::resolve_or_fail(vmSymbols::jdk_internal_agent_Agent(), loader, true, CHECK);
 
     JavaValue result(T_VOID);
@@ -777,7 +774,6 @@ void JMXStartLocalDCmd::execute(DCmdSource source, TRAPS) {
 
     loadAgentModule(CHECK);
     Handle loader = Handle(THREAD, SystemDictionary::java_system_loader());
-    fprintf(stderr, "hi 40-54\n");
     Klass* k = SystemDictionary::resolve_or_fail(vmSymbols::jdk_internal_agent_Agent(), loader, true, CHECK);
 
     JavaValue result(T_VOID);
@@ -795,7 +791,6 @@ void JMXStopRemoteDCmd::execute(DCmdSource source, TRAPS) {
 
     loadAgentModule(CHECK);
     Handle loader = Handle(THREAD, SystemDictionary::java_system_loader());
-    fprintf(stderr, "hi 40-55\n");
     Klass* k = SystemDictionary::resolve_or_fail(vmSymbols::jdk_internal_agent_Agent(), loader, true, CHECK);
 
     JavaValue result(T_VOID);
@@ -817,7 +812,6 @@ void JMXStatusDCmd::execute(DCmdSource source, TRAPS) {
 
   loadAgentModule(CHECK);
   Handle loader = Handle(THREAD, SystemDictionary::java_system_loader());
-  fprintf(stderr, "hi 40-56\n");
   Klass* k = SystemDictionary::resolve_or_fail(vmSymbols::jdk_internal_agent_Agent(), loader, true, CHECK);
 
   JavaValue result(T_OBJECT);
@@ -1063,7 +1057,6 @@ void DumpSharedArchiveDCmd::execute(DCmdSource source, TRAPS) {
     fileh = java_lang_String::create_from_str(file, CHECK);
   }
   Symbol* cds_name  = vmSymbols::jdk_internal_misc_CDS();
-  fprintf(stderr, "hi 40-57\n");
   Klass*  cds_klass = SystemDictionary::resolve_or_fail(cds_name, true /*throw error*/,  CHECK);
   JavaValue result(T_OBJECT);
   JavaCallArguments args;
@@ -1108,7 +1101,6 @@ void ThreadDumpToFileDCmd::dumpToFile(Symbol* name, Symbol* signature, const cha
   Handle h_path = java_lang_String::create_from_str(path, CHECK);
 
   Symbol* sym = vmSymbols::jdk_internal_vm_ThreadDumper();
-  fprintf(stderr, "hi 40-58\n");
   Klass* k = SystemDictionary::resolve_or_fail(sym, true, CHECK);
 
   // invoke the ThreadDump method to dump to file
@@ -1147,7 +1139,6 @@ static void execute_vthread_command(Symbol* method_name, outputStream* output, T
   ResourceMark rm(THREAD);
   HandleMark hm(THREAD);
 
-fprintf(stderr, "hi 40-59\n");
   Klass* k = SystemDictionary::resolve_or_fail(vmSymbols::jdk_internal_vm_JcmdVThreadCommands(), true, CHECK);
 
   JavaValue result(T_OBJECT);

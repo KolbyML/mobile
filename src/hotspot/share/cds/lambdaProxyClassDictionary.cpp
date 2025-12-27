@@ -327,7 +327,6 @@ InstanceKlass* LambdaProxyClassDictionary::load_and_init_lambda_proxy_class(Inst
   assert(shared_nest_host != nullptr, "unexpected nullptr _nest_host");
   assert(shared_nest_host->in_aot_cache(), "nest host must be in aot metaspace");
 
- fprintf(stderr, "hi 40-7\n");
   Klass* resolved_nest_host = SystemDictionary::resolve_or_fail(shared_nest_host->name(), class_loader, true, CHECK_NULL);
   if (resolved_nest_host != shared_nest_host) {
     // The dynamically resolved nest_host is not the same as the one we used during dump time,

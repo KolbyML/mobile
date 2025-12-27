@@ -125,7 +125,6 @@ jmethodID JNIJVMCI::_HotSpotResolvedObjectTypeImpl_fromMetaspace_method;
 jmethodID JNIJVMCI::_HotSpotResolvedPrimitiveType_fromMetaspace_method;
 
 #define START_CLASS(className, fullClassName)                          {                 \
-  fprintf(stderr, "hi 40-41\n"); \
   Klass* k = SystemDictionary::resolve_or_fail(vmSymbols::fullClassName(), true, CHECK); \
   InstanceKlass* current = className::_klass;                                            \
   if (current != InstanceKlass::cast(k)) {                                               \
@@ -515,7 +514,6 @@ void JNIJVMCI::initialize_ids(JNIEnv* env) {
 
 #define DUMP_ALL_NATIVE_METHODS(class_symbol) do {                                                                  \
   current_class_name = class_symbol->as_C_string();                                                                 \
-  fprintf(stderr, "hi 40-42\n");                                                                \
   Klass* k = SystemDictionary::resolve_or_fail(class_symbol, true, CHECK_EXIT);                                     \
   InstanceKlass* iklass = InstanceKlass::cast(k);                                                                   \
   Array<Method*>* methods = iklass->methods();                                                                      \

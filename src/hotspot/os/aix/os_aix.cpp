@@ -549,7 +549,7 @@ void os::init_system_properties_values() {
     }
     Arguments::set_java_home(buf);
     if (!set_boot_path('/', ':')) {
-      vm_exit_during_initialization("Failed setting boot class path. 1", nullptr);
+      vm_exit_during_initialization("Failed setting boot class path.", nullptr);
     }
   }
 

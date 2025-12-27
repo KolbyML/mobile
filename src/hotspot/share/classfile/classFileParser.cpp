@@ -4266,8 +4266,6 @@ void ClassFileParser::verify_legal_class_modifiers(jint flags, Symbol* inner_nam
   if (is_module) {
     ResourceMark rm(THREAD);
     // Names are all known to be < 64k so we know this formatted message is not excessively large.
-    fprintf(stderr, "hi 7-1 ClassFileParser::verify_legal_class_modifiers: JVM_ACC_MODULE set in class %s\n",
-            _class_name->as_C_string());
     Exceptions::fthrow(
       THREAD_AND_LOCATION,
       vmSymbols::java_lang_NoClassDefFoundError(),
@@ -5594,9 +5592,6 @@ void ClassFileParser::parse_stream(const ClassFileStream* const stream,
       if (_class_name != vmSymbols::unknown_class_name()) {
         ResourceMark rm(THREAD);
         // Names are all known to be < 64k so we know this formatted message is not excessively large.
-        fprintf(stderr, "hi 8-1 Class name mismatch: expected %s, found %s\n",
-                _class_name->as_C_string(),
-                class_name_in_cp->as_C_string());
         Exceptions::fthrow(THREAD_AND_LOCATION,
                            vmSymbols::java_lang_NoClassDefFoundError(),
                            "%s (wrong name: %s)",

@@ -3551,7 +3551,6 @@ void java_lang_reflect_Constructor::serialize_offsets(SerializeClosure* f) {
 Handle java_lang_reflect_Constructor::create(TRAPS) {
   assert(Universe::is_fully_initialized(), "Need to find another solution to the reflection problem");
   Symbol* name = vmSymbols::java_lang_reflect_Constructor();
-   fprintf(stderr, "hi 40-12\n");
   Klass* k = SystemDictionary::resolve_or_fail(name, true, CHECK_NH);
   InstanceKlass* ik = InstanceKlass::cast(k);
   // Ensure it is initialized
@@ -3636,7 +3635,6 @@ void java_lang_reflect_Field::serialize_offsets(SerializeClosure* f) {
 Handle java_lang_reflect_Field::create(TRAPS) {
   assert(Universe::is_fully_initialized(), "Need to find another solution to the reflection problem");
   Symbol* name = vmSymbols::java_lang_reflect_Field();
-   fprintf(stderr, "hi 40-13\n");
   Klass* k = SystemDictionary::resolve_or_fail(name, true, CHECK_NH);
   InstanceKlass* ik = InstanceKlass::cast(k);
   // Ensure it is initialized
@@ -3793,7 +3791,6 @@ void java_lang_reflect_Parameter::serialize_offsets(SerializeClosure* f) {
 Handle java_lang_reflect_Parameter::create(TRAPS) {
   assert(Universe::is_fully_initialized(), "Need to find another solution to the reflection problem");
   Symbol* name = vmSymbols::java_lang_reflect_Parameter();
-   fprintf(stderr, "hi 40-14\n");
   Klass* k = SystemDictionary::resolve_or_fail(name, true, CHECK_NH);
   InstanceKlass* ik = InstanceKlass::cast(k);
   // Ensure it is initialized
@@ -5494,7 +5491,6 @@ bool JavaClasses::check_offset(const char *klass_name, int deserialized_offset, 
   EXCEPTION_MARK;
   fieldDescriptor fd;
   TempNewSymbol klass_sym = SymbolTable::new_symbol(klass_name);
-   fprintf(stderr, "hi 40-15\n");
   Klass* k = SystemDictionary::resolve_or_fail(klass_sym, true, CATCH);
   InstanceKlass* ik = InstanceKlass::cast(k);
   TempNewSymbol f_name = SymbolTable::new_symbol(field_name);

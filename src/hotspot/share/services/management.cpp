@@ -180,7 +180,6 @@ void Management::get_optional_support(jmmOptionalSupport* support) {
 }
 
 InstanceKlass* Management::load_and_initialize_klass(Symbol* sh, TRAPS) {
-    fprintf(stderr, "hi 40-60\n");
   Klass* k = SystemDictionary::resolve_or_fail(sh, true, CHECK_NULL);
   return initialize_klass(k, THREAD);
 }

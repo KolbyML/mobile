@@ -671,7 +671,6 @@ void ClassListParser::resolve_indy_impl(Symbol* class_name_symbol, TRAPS) {
   // resolve the CP entry for the invokedynamic instruction, which may result in
   // generation of LambdaForm classes.
   Handle class_loader(THREAD, SystemDictionary::java_system_loader());
-   fprintf(stderr, "hi 40-4\n");
   Klass* klass = SystemDictionary::resolve_or_fail(class_name_symbol, class_loader, true, CHECK);
   if (klass->is_instance_klass()) {
     InstanceKlass* ik = InstanceKlass::cast(klass);

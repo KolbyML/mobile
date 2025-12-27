@@ -86,7 +86,6 @@ public class ScopedValueContainer extends StackableScope {
      * Returns the scoped value bindings for the current thread.
      */
     public static BindingsSnapshot captureBindings() {
-         System.err.println( "hi 50-5\n");
         return new BindingsSnapshot(JLA.scopedValueBindings(), latest());
     }
 

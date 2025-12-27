@@ -2274,7 +2274,6 @@ public final class System {
             }
 
             public Object scopedValueBindings() {
-                System.err.println( "hi 50-17\n");
                 return Thread.scopedValueBindings();
             }
 

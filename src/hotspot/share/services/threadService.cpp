@@ -342,7 +342,6 @@ Handle ThreadService::dump_stack_traces(GrowableArray<instanceHandle>* threads,
   // Allocate the resulting StackTraceElement[][] object
 
   ResourceMark rm(THREAD);
-  fprintf(stderr, "hi 40-61\n");
   Klass* k = SystemDictionary::resolve_or_fail(vmSymbols::java_lang_StackTraceElement_array(), true, CHECK_NH);
   ObjArrayKlass* ik = ObjArrayKlass::cast(k);
   objArrayOop r = oopFactory::new_objArray(ik, num_threads, CHECK_NH);
@@ -1491,7 +1490,6 @@ oop ThreadSnapshotFactory::get_thread_snapshot(jobject jthread, TRAPS) {
 
   // Locks
   Symbol* lock_sym = vmSymbols::jdk_internal_vm_ThreadLock();
-  fprintf(stderr, "hi 40-62\n");
   Klass* lock_k = SystemDictionary::resolve_or_fail(lock_sym, true, CHECK_NULL);
   InstanceKlass* lock_klass = InstanceKlass::cast(lock_k);
 
@@ -1519,7 +1517,6 @@ oop ThreadSnapshotFactory::get_thread_snapshot(jobject jthread, TRAPS) {
   // the method return the same trace array
 
   Symbol* snapshot_klass_name = vmSymbols::jdk_internal_vm_ThreadSnapshot();
-  fprintf(stderr, "hi 40-63\n");
   Klass* snapshot_klass = SystemDictionary::resolve_or_fail(snapshot_klass_name, true, CHECK_NULL);
   if (snapshot_klass->should_be_initialized()) {
     snapshot_klass->initialize(CHECK_NULL);

@@ -79,11 +79,9 @@ bool vmClasses::contain(Klass* k) {
 #endif
 
 bool vmClasses::resolve(vmClassID id, TRAPS) {
-    fprintf(stderr, "hi 160-1\n");
   InstanceKlass** klassp = &_klasses[as_int(id)];
 
 #if INCLUDE_CDS
- fprintf(stderr, "hi 160-2\n");
   if (CDSConfig::is_using_archive() && !JvmtiExport::should_post_class_prepare()) {
     InstanceKlass* k = *klassp;
     assert(k->defined_by_boot_loader(), "must be");
@@ -94,24 +92,12 @@ bool vmClasses::resolve(vmClassID id, TRAPS) {
   }
 #endif // INCLUDE_CDS
 
-if (!is_loaded(*klassp)) {
-  int sid = vm_class_name_ids[as_int(id)];
-  Symbol* symbol = vmSymbols::symbol_at(vmSymbols::as_SID(sid));
-  
-  // Print what we are ABOUT to try
-  fprintf(stderr, "Attempting to resolve: %s\n", symbol->as_C_string());
-
-  // Attempt resolution
-   fprintf(stderr, "hi 160-3\n");
-  Klass* k = SystemDictionary::resolve_or_fail(symbol, true, CHECK_false);
-  
-  // Check if it failed
-  if (k == nullptr) {
-      fprintf(stderr, "FAILED to resolve: %s\n", symbol->as_C_string());
-  } else {
-      (*klassp) = InstanceKlass::cast(k);
+  if (!is_loaded(*klassp)) {
+    int sid = vm_class_name_ids[as_int(id)];
+    Symbol* symbol = vmSymbols::symbol_at(vmSymbols::as_SID(sid));
+    Klass* k = SystemDictionary::resolve_or_fail(symbol, true, CHECK_false);
+    (*klassp) = InstanceKlass::cast(k);
   }
-}
   return ((*klassp) != nullptr);
 }
 
@@ -121,7 +107,6 @@ void vmClasses::resolve_until(vmClassID limit_id, vmClassID &start_id, TRAPS) {
     if (CDSConfig::is_using_aot_linked_classes()) {
       precond(klass_at(id)->is_loaded());
     } else {
-        fprintf(stderr, "hi 60-1\n");
       resolve(id, CHECK);
     }
   }
@@ -131,7 +116,6 @@ void vmClasses::resolve_until(vmClassID limit_id, vmClassID &start_id, TRAPS) {
 }
 
 void vmClasses::resolve_all(TRAPS) {
-  fprintf(stderr, "hi 60-3\n");
   assert(!Object_klass_is_loaded(), "well-known classes should only be initialized once");
 
   // Create the ModuleEntry for java.base.  This call needs to be done here,
@@ -221,7 +205,6 @@ void vmClasses::resolve_all(TRAPS) {
     resolve_through(VM_CLASS_ID(PhantomReference_klass), scan, CHECK);
   }
 
-  fprintf(stderr, "hi 60-2\n");
   resolve_until(vmClassID::LIMIT, scan, CHECK);
 
   CollectedHeap::set_filler_object_klass(vmClasses::FillerObject_klass());

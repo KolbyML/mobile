@@ -279,7 +279,6 @@ JNI_ENTRY(jclass, jni_DefineClass(JNIEnv *env, const char *name, jobject loaderR
   DT_RETURN_MARK(DefineClass, jclass, (const jclass&)cls);
 
   // Class resolution will get the class name from the .class stream if the name is null.
-  fprintf(stderr, "hi 14-1\n");
   TempNewSymbol class_name = name == nullptr ? nullptr :
     SystemDictionary::class_name_symbol(name, vmSymbols::java_lang_NoClassDefFoundError(),
                                         CHECK_NULL);
@@ -314,7 +313,6 @@ JNI_ENTRY(jclass, jni_FindClass(JNIEnv *env, const char *name))
   DT_RETURN_MARK(FindClass, jclass, (const jclass&)result);
 
   // This should be ClassNotFoundException imo.
-  fprintf(stderr, "hi 15-1\n");
   TempNewSymbol class_name =
     SystemDictionary::class_name_symbol(name, vmSymbols::java_lang_NoClassDefFoundError(),
                                         CHECK_NULL);

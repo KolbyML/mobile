@@ -522,7 +522,6 @@ Klass* SignatureStream::as_klass(Handle class_loader, FailureMode failure_mode, 
     // The test here allows for an additional mode CNFException
     // if callers need to request the reflective error instead.
     bool throw_error = (failure_mode == NCDFError);
-    fprintf(stderr, "hi 40-48\n");
     k = SystemDictionary::resolve_or_fail(name, class_loader, throw_error, CHECK_NULL);
   }
 

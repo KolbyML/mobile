@@ -466,7 +466,6 @@ final class VirtualThread extends BaseVirtualThread {
             event.commit();
         }
 
- System.err.println( "hi 50-8\n");
         Object bindings = Thread.scopedValueBindings();
         try {
             runWith(bindings, task);

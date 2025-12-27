@@ -886,7 +886,6 @@ static jclass jvm_define_class_common(const char *name,
   }
 
   // Class resolution will get the class name from the .class stream if the name is null.
-  fprintf(stderr, "hi 16-1\n");
   TempNewSymbol class_name = name == nullptr ? nullptr :
        SystemDictionary::class_name_symbol(name, vmSymbols::java_lang_NoClassDefFoundError(),
                                            CHECK_NULL);
@@ -972,7 +971,6 @@ static jclass jvm_lookup_define_class(jclass lookup, const char *name,
   }
 
   // Class resolution will get the class name from the .class stream if the name is null.
-  fprintf(stderr, "hi 17-1\n");
   TempNewSymbol class_name = name == nullptr ? nullptr :
        SystemDictionary::class_name_symbol(name, vmSymbols::java_lang_NoClassDefFoundError(),
                                            CHECK_NULL);
@@ -1217,7 +1215,6 @@ class ScopedValueBindingsResolver {
 public:
   InstanceKlass* Carrier_klass;
   ScopedValueBindingsResolver(JavaThread* THREAD) {
-    fprintf(stderr, "hi 40-46\n");
     Klass *k = SystemDictionary::resolve_or_fail(vmSymbols::java_lang_ScopedValue_Carrier(), true, THREAD);
     Carrier_klass = InstanceKlass::cast(k);
   }
@@ -1228,7 +1225,6 @@ JVM_ENTRY(jobject, JVM_FindScopedValueBindings(JNIEnv *env, jclass cls))
   GrowableArray<Handle>* local_array = new GrowableArray<Handle>(12);
   JvmtiVMObjectAllocEventCollector oam;
 
-    fprintf(stderr, "hi 50-1\n");
   static ScopedValueBindingsResolver resolver(THREAD);
 
   // Iterate through Java frames
@@ -3293,7 +3289,6 @@ JNIEXPORT void JNICALL JVM_RawMonitorExit(void *mon) {
 
 jclass find_class_from_class_loader(JNIEnv* env, Symbol* name, jboolean init,
                                     Handle loader, jboolean throwError, TRAPS) {
-                                        fprintf(stderr, "hi 40-47\n");
   Klass* klass = SystemDictionary::resolve_or_fail(name, loader, throwError != 0, CHECK_NULL);
 
   // Check if we should initialize the class

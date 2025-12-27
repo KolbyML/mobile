@@ -55,7 +55,6 @@ static bool setup_event_writer_offsets(TRAPS) {
   const char class_name[] = "jdk/jfr/internal/event/EventWriter";
   Symbol* const k_sym = SymbolTable::new_symbol(class_name);
   assert(k_sym != nullptr, "invariant");
-  fprintf(stderr, "hi 40-35\n");
   Klass* klass = SystemDictionary::resolve_or_fail(k_sym, true, CHECK_false);
   assert(klass != nullptr, "invariant");
 

@@ -315,7 +315,6 @@ static void handle_resolution_exception(Symbol* class_name, bool throw_error, TR
       ResourceMark rm(THREAD);
       Handle e(THREAD, PENDING_EXCEPTION);
       CLEAR_PENDING_EXCEPTION;
-      fprintf(stderr, "hi 9-1\n");
       THROW_MSG_CAUSE(vmSymbols::java_lang_NoClassDefFoundError(), class_name->as_C_string(), e);
     } else {
       return; // the caller will throw the incoming exception
@@ -325,7 +324,6 @@ static void handle_resolution_exception(Symbol* class_name, bool throw_error, TR
   // error or exception depending on the value of throw_error.
   ResourceMark rm(THREAD);
   if (throw_error) {
-    fprintf(stderr, "hi 10-1\n");
     THROW_MSG(vmSymbols::java_lang_NoClassDefFoundError(), class_name->as_C_string());
   } else {
     THROW_MSG(vmSymbols::java_lang_ClassNotFoundException(), class_name->as_C_string());
@@ -339,7 +337,6 @@ Klass* SystemDictionary::resolve_or_fail(Symbol* class_name, Handle class_loader
   Klass* klass = resolve_or_null(class_name, class_loader, THREAD);
   // Check for pending exception or null klass, and throw exception
   if (HAS_PENDING_EXCEPTION || klass == nullptr) {
-    fprintf(stderr, "hi 30-1\n");
     handle_resolution_exception(class_name, throw_error, CHECK_NULL);
   }
   return klass;
@@ -349,7 +346,6 @@ Klass* SystemDictionary::resolve_or_fail(Symbol* class_name, Handle class_loader
 
 Klass* SystemDictionary::resolve_or_null(Symbol* class_name, Handle class_loader, TRAPS) {
   if (Signature::is_array(class_name)) {
-    fprintf(stderr, "hi 30-1.1\n");
     return resolve_array_class_or_null(class_name, class_loader, THREAD);
   } else {
     assert(class_name != nullptr && !Signature::is_array(class_name), "must be");
@@ -358,10 +354,8 @@ Klass* SystemDictionary::resolve_or_null(Symbol* class_name, Handle class_loader
       // Ignore wrapping L and ;.
       TempNewSymbol name = SymbolTable::new_symbol(class_name->as_C_string() + 1,
                                                    class_name->utf8_length() - 2);
-     fprintf(stderr, "hi 30-1.2\n");
       return resolve_instance_class_or_null(name, class_loader, THREAD);
     } else {
-        fprintf(stderr, "hi 30-1.3\n");
       return resolve_instance_class_or_null(class_name, class_loader, THREAD);
     }
   }
@@ -495,7 +489,6 @@ InstanceKlass* SystemDictionary::resolve_with_circularity_detection(Symbol* clas
 
   // Check for pending exception or null superk, and throw exception
   if (HAS_PENDING_EXCEPTION || superk == nullptr) {
-    fprintf(stderr, "hi 31-1\n");
     handle_resolution_exception(next_name, true, CHECK_NULL);
   }
 
@@ -515,7 +508,6 @@ static void handle_parallel_super_load(Symbol* name,
 
   // The result superk is not used; resolve_with_circularity_detection is called for circularity check only.
   // This passes false to is_superclass to skip doing the unlikely optimization.
-  fprintf(stderr, "hi 32-1\n");
   Klass* superk = SystemDictionary::resolve_with_circularity_detection(name,
                                                                        superclassname,
                                                                        class_loader,
@@ -576,13 +568,11 @@ static InstanceKlass* handle_parallel_loading(JavaThread* current,
 InstanceKlass* SystemDictionary::resolve_instance_class_or_null(Symbol* name,
                                                                 Handle class_loader,
                                                                 TRAPS) {
-  fprintf(stderr, "hi 90-1\n");
   // name must be in the form of "java/lang/Object" -- cannot be "Ljava/lang/Object;"
   DEBUG_ONLY(ResourceMark rm(THREAD));
   assert(name != nullptr && !Signature::is_array(name) &&
          !Signature::has_envelope(name), "invalid class name: %s", name == nullptr ? "nullptr" : name->as_C_string());
 
-    fprintf(stderr, "hi 90-2\n");
   EventClassLoad class_load_event;
 
   HandleMark hm(THREAD);
@@ -592,9 +582,7 @@ InstanceKlass* SystemDictionary::resolve_instance_class_or_null(Symbol* name,
 
   // Do lookup to see if class already exists.
   InstanceKlass* probe = dictionary->find_class(THREAD, name);
-  fprintf(stderr, "hi 90-3\n");
   if (probe != nullptr) return probe;
-  fprintf(stderr, "hi 90-4\n");
 
   // Non-bootstrap class loaders will call out to class loader and
   // define via jvm/jni_DefineClass which will acquire the
@@ -634,12 +622,9 @@ InstanceKlass* SystemDictionary::resolve_instance_class_or_null(Symbol* name,
     }
   }
 
-  fprintf(stderr, "hi 90-5\n");
-
   // If the class is in the placeholder table with super_class set,
   // handle superclass loading in progress.
   if (circularity_detection_in_progress) {
-    fprintf(stderr, "hi 90-6\n");
     handle_parallel_super_load(name, superclassname,
                                class_loader,
                                CHECK_NULL);
@@ -647,7 +632,6 @@ InstanceKlass* SystemDictionary::resolve_instance_class_or_null(Symbol* name,
 
   bool throw_circularity_error = false;
   if (loaded_class == nullptr) {
-    fprintf(stderr, "hi 90-7\n");
     bool load_placeholder_added = false;
 
     // Add placeholder entry to record loading instance class
@@ -701,13 +685,10 @@ InstanceKlass* SystemDictionary::resolve_instance_class_or_null(Symbol* name,
     // you need to find_and_remove it before returning.
     // So be careful to not exit with a CHECK_ macro between these calls.
 
-    fprintf(stderr, "hi 150-3\n");
     if (loaded_class == nullptr) {
       // Do actual loading
       loaded_class = load_instance_class(name, class_loader, THREAD);
     }
-    fprintf(stderr, "hi 150-4\n");
-
 
     if (load_placeholder_added) {
       // clean up placeholder entries for LOAD_INSTANCE success or error
@@ -720,8 +701,6 @@ InstanceKlass* SystemDictionary::resolve_instance_class_or_null(Symbol* name,
   }
 
   if (HAS_PENDING_EXCEPTION || loaded_class == nullptr) {
-    fprintf(stderr, "hi 90-9 %s || %s \n", HAS_PENDING_EXCEPTION ? "true" : "false",
-            loaded_class == nullptr ? "true" : "false");
     return nullptr;
   }
 
@@ -732,7 +711,6 @@ InstanceKlass* SystemDictionary::resolve_instance_class_or_null(Symbol* name,
   // Make sure we have the right class in the dictionary
   DEBUG_ONLY(verify_dictionary_entry(name, loaded_class));
 
-  fprintf(stderr, "hi 90-10\n");
   return loaded_class;
 }
 
@@ -1048,7 +1026,6 @@ bool SystemDictionary::check_shared_class_super_type(InstanceKlass* klass, Insta
     }
   }
 
-fprintf(stderr, "hi 33-1\n");
   Klass *found = resolve_with_circularity_detection(klass->name(), super_type->name(),
                                                     class_loader, is_superclass, CHECK_false);
   if (found == super_type) {
@@ -1242,9 +1219,7 @@ void SystemDictionary::post_class_load_event(EventClassLoad* event, const Instan
 
 InstanceKlass* SystemDictionary::load_instance_class_impl(Symbol* class_name, Handle class_loader, TRAPS) {
 
-fprintf(stderr, "hi 100-1\n");
   if (class_loader.is_null()) {
-    fprintf(stderr, "hi 100-2\n");
     ResourceMark rm(THREAD);
     PackageEntry* pkg_entry = nullptr;
     bool search_only_bootloader_append = false;
@@ -1252,14 +1227,12 @@ fprintf(stderr, "hi 100-1\n");
     // Find the package in the boot loader's package entry table.
     TempNewSymbol pkg_name = ClassLoader::package_from_class_name(class_name);
     if (pkg_name != nullptr) {
-        fprintf(stderr, "hi 100-2\n");
       pkg_entry = class_loader_data(class_loader)->packages()->lookup_only(pkg_name);
     }
 
     // Prior to attempting to load the class, enforce the boot loader's
     // visibility boundaries.
     if (!Universe::is_module_initialized()) {
-        fprintf(stderr, "hi 100-2\n");
       // During bootstrapping, prior to module initialization, any
       // class attempting to be loaded must be checked against the
       // java.base packages in the boot loader's PackageEntryTable.
@@ -1274,7 +1247,6 @@ fprintf(stderr, "hi 100-1\n");
         // and its package will be checked later by
         // ModuleEntryTable::verify_javabase_packages.
         if (ModuleEntryTable::javabase_defined()) {
-            fprintf(stderr, "hi 100-3\n");
           return nullptr;
         }
       } else {
@@ -1282,7 +1254,6 @@ fprintf(stderr, "hi 100-1\n");
         ModuleEntry* mod_entry = pkg_entry->module();
         Symbol* mod_entry_name = mod_entry->name();
         if (mod_entry_name->fast_compare(vmSymbols::java_base()) != 0) {
-            fprintf(stderr, "hi 100-4\n");
           return nullptr;
         }
       }
@@ -1298,7 +1269,6 @@ fprintf(stderr, "hi 100-1\n");
         if (!ClassLoader::has_bootclasspath_append()) {
            // If there is no bootclasspath append entry, no need to continue
            // searching.
-           fprintf(stderr, "hi 100-5\n");
            return nullptr;
         }
         search_only_bootloader_append = true;
@@ -1326,9 +1296,7 @@ fprintf(stderr, "hi 100-1\n");
     }
 #endif
 
-fprintf(stderr, "hi 100-6\n");
     if (k == nullptr) {
-        fprintf(stderr, "hi 100-7\n");
       // Use VM class loader
       PerfTraceTime vmtimer(ClassLoader::perf_sys_classload_time());
       k = ClassLoader::load_class(class_name, pkg_entry, search_only_bootloader_append, CHECK_NULL);
@@ -1336,11 +1304,9 @@ fprintf(stderr, "hi 100-6\n");
 
     // find_or_define_instance_class may return a different InstanceKlass
     if (k != nullptr) {
-        fprintf(stderr, "hi 100-8\n");
       CDS_ONLY(SharedClassLoadingMark slm(THREAD, k);)
       k = find_or_define_instance_class(class_name, class_loader, k, CHECK_NULL);
     }
-    fprintf(stderr, "hi 100-9\n");
     return k;
   } else {
     // Use user specified class loader to load class. Call loadClass operation on class_loader.
@@ -1379,19 +1345,15 @@ fprintf(stderr, "hi 100-6\n");
 
     // Primitive classes return null since forName() cannot be
     // used to obtain any of the Class objects representing primitives or void
-    fprintf(stderr, "hi 100-10\n");
     if ((obj != nullptr) && !(java_lang_Class::is_primitive(obj))) {
-        fprintf(stderr, "hi 100-11\n");
       InstanceKlass* k = java_lang_Class::as_InstanceKlass(obj);
       // For user defined Java class loaders, check that the name returned is
       // the same as that requested.  This check is done for the bootstrap
       // loader when parsing the class file.
       if (class_name == k->name()) {
-        fprintf(stderr, "hi 100-12\n");
         return k;
       }
     }
-    fprintf(stderr, "hi 100-13\n");
     // Class is not found or has the wrong name, return null
     return nullptr;
   }
@@ -1401,9 +1363,7 @@ InstanceKlass* SystemDictionary::load_instance_class(Symbol* name,
                                                      Handle class_loader,
                                                      TRAPS) {
 
-    fprintf(stderr, "hi 150-1\n");
   InstanceKlass* loaded_class = load_instance_class_impl(name, class_loader, CHECK_NULL);
-  fprintf(stderr, "hi 150-2\n");
 
   // If everything was OK (no exceptions, no null return value), and
   // class_loader is NOT the defining loader, do a little more bookkeeping.
@@ -1659,9 +1619,7 @@ void SystemDictionary::initialize(TRAPS) {
   }
 #endif
   // Resolve basic classes
-  fprintf(stderr, "hi 60-4\n");
   vmClasses::resolve_all(CHECK);
-//   fprintf(stderr, "hi 60-4.1 %s\n", CDSConfig::is_using_archive());
   // Resolve classes used by archived heap objects
   if (CDSConfig::is_using_archive()) {
     HeapShared::resolve_classes(THREAD);

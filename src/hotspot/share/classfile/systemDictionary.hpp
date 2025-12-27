@@ -92,7 +92,6 @@ class SystemDictionary : AllStatic {
   static Klass* resolve_or_fail(Symbol* class_name, Handle class_loader, bool throw_error, TRAPS);
   // Convenient call for null loader and protection domain.
   static Klass* resolve_or_fail(Symbol* class_name, bool throw_error, TRAPS) {
-     fprintf(stderr, "hi 40-20\n");
     return resolve_or_fail(class_name, Handle(), throw_error, THREAD);
   }
 
@@ -116,7 +115,6 @@ class SystemDictionary : AllStatic {
   static InstanceKlass* resolve_super_or_fail(Symbol* class_name, Symbol* super_name,
                                               Handle class_loader,
                                               bool is_superclass, TRAPS) {
-                                                fprintf(stderr, "hi 34-1\n");
     return resolve_with_circularity_detection(class_name, super_name, class_loader, is_superclass, THREAD);
   }
 

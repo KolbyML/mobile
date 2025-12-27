@@ -212,7 +212,6 @@ void JVMCI::ensure_box_caches_initialized(TRAPS) {
   CompilerThreadCanCallJava ccj(THREAD, true);
 
   for (unsigned i = 0; i < sizeof(box_classes) / sizeof(Symbol*); i++) {
-    fprintf(stderr, "hi 40-36\n");
     Klass* k = SystemDictionary::resolve_or_fail(box_classes[i], true, CHECK);
     InstanceKlass* ik = InstanceKlass::cast(k);
     if (ik->is_not_initialized()) {

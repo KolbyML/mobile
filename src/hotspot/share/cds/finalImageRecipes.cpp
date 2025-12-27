@@ -193,7 +193,6 @@ void FinalImageRecipes::load_all_classes(TRAPS) {
         SystemDictionaryShared::add_unregistered_class(THREAD, ik);
         SystemDictionaryShared::copy_unregistered_class_size_and_crc32(ik);
       } else if (!ik->is_hidden()) {
-         fprintf(stderr, "hi 40-5\n");
         Klass* actual = SystemDictionary::resolve_or_fail(ik->name(), class_loader, true, CHECK);
         if (actual != ik) {
           ResourceMark rm(THREAD);

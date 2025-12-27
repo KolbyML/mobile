@@ -97,7 +97,6 @@ void JavaAssertions::addOption(const char* name, bool enable) {
 
 oop JavaAssertions::createAssertionStatusDirectives(TRAPS) {
   Symbol* asd_sym = vmSymbols::java_lang_AssertionStatusDirectives();
-   fprintf(stderr, "hi 40-12\n");
   Klass* k = SystemDictionary::resolve_or_fail(asd_sym, true, CHECK_NULL);
   InstanceKlass* asd_klass = InstanceKlass::cast(k);
   asd_klass->initialize(CHECK_NULL);

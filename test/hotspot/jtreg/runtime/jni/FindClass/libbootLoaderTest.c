@@ -38,7 +38,6 @@ Java_java_lang_BootNativeLibrary_findClass
 
     if (c == NULL) {
         // clear NCDFE
-        fprintf(stderr, "hi 6-1 BootNativeLibrary.findClass: clearing NoClassDefFoundError for %s\n", classname);
         t = (*env)->ExceptionOccurred(env);
         ncdfe = (*env)->FindClass(env, "java/lang/NoClassDefFoundError");
         if (t != NULL && (*env)->IsInstanceOf(env, t, ncdfe)) {

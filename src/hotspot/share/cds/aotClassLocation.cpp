@@ -104,7 +104,6 @@ class BootCpClassLocationStream : public ClassLocationStream {
 public:
   BootCpClassLocationStream() : ClassLocationStream() {
     // Arguments::get_boot_class_path() contains $JAVA_HOME/lib/modules, but we treat that separately
-    fprintf(stderr,"hi 3-1\n");
     for (const char* bootcp = Arguments::get_boot_class_path(); *bootcp != '\0'; ++bootcp) {
       if (*bootcp == *os::path_separator()) {
         ++bootcp;

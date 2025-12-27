@@ -339,7 +339,6 @@ Handle Exceptions::new_exception(JavaThread* thread, Symbol* name,
   Handle h_exception;
 
   // Resolve exception klass, and check for pending exception below.
-  fprintf(stderr, "hi 40-64\n");
   Klass* klass = SystemDictionary::resolve_or_fail(name, h_loader, true, thread);
 
   if (!thread->has_pending_exception()) {

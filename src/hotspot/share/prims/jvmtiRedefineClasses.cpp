@@ -1402,7 +1402,6 @@ jvmtiError VM_RedefineClasses::load_new_class_versions() {
       } else if (ex_name == vmSymbols::java_lang_ClassCircularityError()) {
         return JVMTI_ERROR_CIRCULAR_CLASS_DEFINITION;
       } else if (ex_name == vmSymbols::java_lang_NoClassDefFoundError()) {
-        fprintf(stderr, "hi 18-1\n");
         // The message will be "XXX (wrong name: YYY)"
         return JVMTI_ERROR_NAMES_DONT_MATCH;
       } else if (ex_name == vmSymbols::java_lang_OutOfMemoryError()) {
@@ -1430,7 +1429,6 @@ jvmtiError VM_RedefineClasses::load_new_class_versions() {
         if (ex_name == vmSymbols::java_lang_OutOfMemoryError()) {
           return JVMTI_ERROR_OUT_OF_MEMORY;
         } else if (ex_name == vmSymbols::java_lang_NoClassDefFoundError()) {
-            fprintf(stderr, "hi 20-1\n");
           return JVMTI_ERROR_INVALID_CLASS;
         } else {
           return JVMTI_ERROR_INTERNAL;

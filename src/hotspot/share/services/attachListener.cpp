@@ -211,7 +211,6 @@ static bool get_bool_sys_prop(const char* name, bool default_value, TRAPS) {
 // the system properties into a byte array.
 
 static InstanceKlass* load_and_initialize_klass(Symbol* sh, TRAPS) {
-    fprintf(stderr, "hi 40-50\n");
   Klass* k = SystemDictionary::resolve_or_fail(sh, true, CHECK_NULL);
   InstanceKlass* ik = InstanceKlass::cast(k);
   if (ik->should_be_initialized()) {
